@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <omp.h>
+
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
 #endif
@@ -41,7 +43,9 @@ void map_model(double **planet,int n_layers,double lambda0, double phi0, double 
     // other side than in the simulations
     double lo_cen = -1*center_coords[0];
 
-    for (int k = 0; k < pow(n_layers,2); ++k) {
+
+    #pragma omp parallel for private(R_mid,theta_mid,mid_x,mid_y,la,lo)
+    for (int k = 0; k < n_layers*n_layers; ++k) {
 
         if(k == 0){
             R_mid = 0;
